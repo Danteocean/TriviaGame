@@ -1,26 +1,4 @@
 # ==========================================
-# SECCIÓN ANGULAR / FRONTEND (NUEVO)
-# ==========================================
-# Dependencias
-node_modules/
-
-# Salidas de compilación y caché de Angular
-/dist/
-/.angular/
-/.cache/
-
-# Cobertura de pruebas (Karma/Jest)
-/coverage/
-
-# Archivos de configuración de TypeScript
-*.tsbuildinfo
-
-# Logs de NPM/Yarn
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# ==========================================
 # SECCIÓN .NET (TU CONFIGURACIÓN)
 # ==========================================
 bin/
