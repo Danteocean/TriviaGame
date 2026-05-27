@@ -1,0 +1,79 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using CoreLibrary.Interface.Services.Client
+@using Microsoft.AspNetCore.Components.Web
+@inject IPlayerHttpClient PlayerService
+@inject NavigationManager Navigation
+
+<div class="landing-page">
+    <div class="landing-card">
+        <div class="hero">
+            <span class="hero-tag">🎮 Trivia Game</span>
+            <h1>¿Quién quiere ser millonario?</h1>
+            <p class="hero-subtitle">Responde 5 preguntas de dificultad creciente y acumula premios.</p>
+        </div>
+
+        <div class="alias-panel">
+            <label class="alias-label" for="aliasInput">Tu alias</label>
+            <input
+                id="aliasInput"
+                class="alias-input"
+                @bind="alias"
+                @bind:event="oninput"
+                @onkeydown="HandleEnterKey"
+                placeholder="Ingresa tu alias" />
+
+            <button class="btn-primary" @onclick="HandleStartGame" disabled="@isLoading">
+                @(isLoading ? "Cargando..." : "Iniciar Juego")
+            </button>
+
+            <p class="alias-note">Este alias se utilizará para crear o recuperar tu jugador en el servidor.</p>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="error-message">@errorMessage</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private string alias = string.Empty;
+    private bool isLoading = false;
+    private string errorMessage = string.Empty;
+
+    private async Task HandleStartGame()
+    {
+        errorMessage = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(alias))
+        {
+            errorMessage = "Por favor ingresa un alias.";
+            return;
+        }
+
+        isLoading = true;
+        var trimmedAlias = alias.Trim();
+
+        var response = await PlayerService.EnterGameAsync(trimmedAlias);
+
+        if (response.Succeeded)
+        {
+            Navigation.NavigateTo($"/game?alias={Uri.EscapeDataString(trimmedAlias)}");
+        }
+        else
+        {
+            errorMessage = response.Message ?? "No se pudo iniciar el juego.";
+        }
+
+        isLoading = false;
+    }
+
+    private async Task HandleEnterKey(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await HandleStartGame();
+        }
+    }
+}

@@ -1,0 +1,36 @@
+@page "/game"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager Navigation
+
+<div class="game-page">
+    <div class="game-card">
+        <div class="game-header">
+            <span class="game-tag">🏁 Juego</span>
+            <h1>Bienvenido, @AliasDisplay</h1>
+            <p class="game-subtitle">Aquí comenzará tu partida. En el siguiente paso cargaremos preguntas desde el servidor.</p>
+        </div>
+
+        <div class="game-body">
+            <div class="status-card">
+                <h2>Tu alias</h2>
+                <p class="status-text"><strong>@AliasDisplay</strong></p>
+            </div>
+
+            <div class="actions-row">
+                <button class="btn-primary" @onclick="GoHome">Volver al inicio</button>
+                <button class="btn-secondary" disabled>Continuar (próximo paso)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? alias { get; set; }
+
+    private string AliasDisplay => string.IsNullOrWhiteSpace(alias) ? "Jugador" : alias!;
+
+    private void GoHome() => Navigation.NavigateTo("/");
+}

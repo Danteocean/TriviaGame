@@ -1,0 +1,106 @@
+.landing-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #07192d 0%, #081a3b 55%, #0f214b 100%);
+    color: #edf2f7;
+}
+
+.landing-card {
+    width: min(640px, 100%);
+    background: rgba(15, 32, 71, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+    padding: 2.5rem;
+    backdrop-filter: blur(14px);
+}
+
+.hero-tag {
+    display: inline-flex;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8e28a;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+}
+
+.landing-card h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 4vw, 3.7rem);
+    line-height: 1.02;
+}
+
+.hero-subtitle {
+    margin-top: 1rem;
+    color: #cbd5e1;
+    font-size: 1rem;
+    max-width: 34rem;
+}
+
+.alias-panel {
+    margin-top: 2rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.alias-label {
+    font-size: 0.9rem;
+    color: #a5b4fc;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.alias-input {
+    width: 100%;
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    font-size: 1rem;
+}
+
+.alias-input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 1rem;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 40px rgba(56, 189, 248, 0.22);
+}
+
+.btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.alias-note {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.error-message {
+    color: #fecaca;
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    padding: 0.9rem 1rem;
+    border-radius: 0.9rem;
+    font-size: 0.95rem;
+}

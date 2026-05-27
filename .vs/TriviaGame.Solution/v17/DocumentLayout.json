@@ -1,0 +1,397 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\PROYECTOS\\TriviaGame.Solution\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|c:\\proyectos\\triviagame.solution\\triviagame\\components\\pages\\startgame.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|solutionrelative:triviagame\\components\\pages\\startgame.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0294C234-F149-4B28-97AD-C87F54E0226F}|Services\\Services.csproj|c:\\proyectos\\triviagame.solution\\services\\http\\playerhttpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0294C234-F149-4B28-97AD-C87F54E0226F}|Services\\Services.csproj|solutionrelative:services\\http\\playerhttpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|c:\\proyectos\\triviagame.solution\\corelibrary\\wrappers\\response.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|solutionrelative:corelibrary\\wrappers\\response.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|c:\\proyectos\\triviagame.solution\\triviagameapi\\controllers\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|solutionrelative:triviagameapi\\controllers\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{90327BCE-1B5E-2ED7-C3F4-CEE86A9C2A14}|infrastructure\\infrastructure\\infrastructure.csproj|c:\\proyectos\\triviagame.solution\\infrastructure\\infrastructure\\repositories\\repositoryasync\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{90327BCE-1B5E-2ED7-C3F4-CEE86A9C2A14}|infrastructure\\infrastructure\\infrastructure.csproj|solutionrelative:infrastructure\\infrastructure\\repositories\\repositoryasync\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|c:\\proyectos\\triviagame.solution\\triviagame\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|solutionrelative:triviagame\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|c:\\proyectos\\triviagame.solution\\triviagame\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|solutionrelative:triviagame\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|c:\\proyectos\\triviagame.solution\\triviagameapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|solutionrelative:triviagameapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|c:\\proyectos\\triviagame.solution\\triviagame\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|solutionrelative:triviagame\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|c:\\proyectos\\triviagame.solution\\triviagameapi\\triviagameapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|solutionrelative:triviagameapi\\triviagameapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0294C234-F149-4B28-97AD-C87F54E0226F}|Services\\Services.csproj|c:\\proyectos\\triviagame.solution\\services\\common\\basehttpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0294C234-F149-4B28-97AD-C87F54E0226F}|Services\\Services.csproj|solutionrelative:services\\common\\basehttpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|c:\\proyectos\\triviagame.solution\\triviagameapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{18423BBB-7B13-4313-9AF9-0F324BF9CAB4}|TriviaGameApi\\TriviaGameApi.csproj|solutionrelative:triviagameapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|c:\\proyectos\\triviagame.solution\\corelibrary\\features\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|solutionrelative:corelibrary\\features\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|c:\\proyectos\\triviagame.solution\\corelibrary\\features\\gamesessionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|solutionrelative:corelibrary\\features\\gamesessionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E528BBC3-1C26-8C35-F682-23718816ADCD}|domain\\Domain.csproj|c:\\proyectos\\triviagame.solution\\domain\\querys\\interface\\iqueryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E528BBC3-1C26-8C35-F682-23718816ADCD}|domain\\Domain.csproj|solutionrelative:domain\\querys\\interface\\iqueryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E528BBC3-1C26-8C35-F682-23718816ADCD}|domain\\Domain.csproj|c:\\proyectos\\triviagame.solution\\domain\\querys\\sqlqueries.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E528BBC3-1C26-8C35-F682-23718816ADCD}|domain\\Domain.csproj|solutionrelative:domain\\querys\\sqlqueries.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|c:\\proyectos\\triviagame.solution\\corelibrary\\mappings\\questionprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|solutionrelative:corelibrary\\mappings\\questionprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E528BBC3-1C26-8C35-F682-23718816ADCD}|domain\\Domain.csproj|c:\\proyectos\\triviagame.solution\\domain\\entities\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E528BBC3-1C26-8C35-F682-23718816ADCD}|domain\\Domain.csproj|solutionrelative:domain\\entities\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|c:\\proyectos\\triviagame.solution\\corelibrary\\interface\\services\\client\\iplayerhttpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|solutionrelative:corelibrary\\interface\\services\\client\\iplayerhttpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|c:\\proyectos\\triviagame.solution\\triviagame\\components\\routes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|solutionrelative:triviagame\\components\\routes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|c:\\proyectos\\triviagame.solution\\triviagame\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{85F78AAA-FB86-4C11-AACB-B683F4BFF15F}|TriviaGame\\TriviaGame.csproj|solutionrelative:triviagame\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|c:\\proyectos\\triviagame.solution\\corelibrary\\interface\\services\\iplayerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4BB95B03-8D65-77DA-EBA4-9B5FCF75AFF1}|CoreLibrary\\CoreLibrary.csproj|solutionrelative:corelibrary\\interface\\services\\iplayerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "GameSessionService.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Features\\GameSessionService.cs",
+              "RelativeDocumentMoniker": "CoreLibrary\\Features\\GameSessionService.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Features\\GameSessionService.cs",
+              "RelativeToolTip": "CoreLibrary\\Features\\GameSessionService.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAowC4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-26T23:20:44.17Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Response.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Wrappers\\Response.cs",
+              "RelativeDocumentMoniker": "CoreLibrary\\Wrappers\\Response.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Wrappers\\Response.cs",
+              "RelativeToolTip": "CoreLibrary\\Wrappers\\Response.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T05:08:03.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StartGame.razor",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Components\\Pages\\StartGame.razor",
+              "RelativeDocumentMoniker": "TriviaGame\\Components\\Pages\\StartGame.razor",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Components\\Pages\\StartGame.razor",
+              "RelativeToolTip": "TriviaGame\\Components\\Pages\\StartGame.razor",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAIwEUAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T00:01:30.808Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayerHttpClient.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\Services\\Http\\PlayerHttpClient.cs",
+              "RelativeDocumentMoniker": "Services\\Http\\PlayerHttpClient.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\Services\\Http\\PlayerHttpClient.cs",
+              "RelativeToolTip": "Services\\Http\\PlayerHttpClient.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABYAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T02:33:26.637Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PlayerController.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\Controllers\\PlayerController.cs",
+              "RelativeDocumentMoniker": "TriviaGameApi\\Controllers\\PlayerController.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\Controllers\\PlayerController.cs",
+              "RelativeToolTip": "TriviaGameApi\\Controllers\\PlayerController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAApwCwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T02:33:26.585Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\infrastructure\\infrastructure\\Repositories\\RepositoryAsync\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "infrastructure\\infrastructure\\Repositories\\RepositoryAsync\\GenericRepository.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\infrastructure\\infrastructure\\Repositories\\RepositoryAsync\\GenericRepository.cs",
+              "RelativeToolTip": "infrastructure\\infrastructure\\Repositories\\RepositoryAsync\\GenericRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABgAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T02:33:26.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\appsettings.json",
+              "RelativeDocumentMoniker": "TriviaGame\\appsettings.json",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\appsettings.json",
+              "RelativeToolTip": "TriviaGame\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-27T05:00:40.094Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "TriviaGame\\appsettings.Development.json",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\appsettings.Development.json",
+              "RelativeToolTip": "TriviaGame\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-27T04:44:51.573Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Program.cs",
+              "RelativeDocumentMoniker": "TriviaGame\\Program.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Program.cs",
+              "RelativeToolTip": "TriviaGame\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-26T23:40:34.294Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\Program.cs",
+              "RelativeDocumentMoniker": "TriviaGameApi\\Program.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\Program.cs",
+              "RelativeToolTip": "TriviaGameApi\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T01:14:05.356Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TriviaGameApi",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\TriviaGameApi.csproj",
+              "RelativeDocumentMoniker": "TriviaGameApi\\TriviaGameApi.csproj",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\TriviaGameApi.csproj",
+              "RelativeToolTip": "TriviaGameApi\\TriviaGameApi.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-05-27T04:58:29.482Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BaseHttpClient.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\Services\\Common\\BaseHttpClient.cs",
+              "RelativeDocumentMoniker": "Services\\Common\\BaseHttpClient.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\Services\\Common\\BaseHttpClient.cs",
+              "RelativeToolTip": "Services\\Common\\BaseHttpClient.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAowAkAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-26T21:51:56.797Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\appsettings.json",
+              "RelativeDocumentMoniker": "TriviaGameApi\\appsettings.json",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGameApi\\appsettings.json",
+              "RelativeToolTip": "TriviaGameApi\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAClAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-27T01:38:20.393Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Routes.razor",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Components\\Routes.razor",
+              "RelativeDocumentMoniker": "TriviaGame\\Components\\Routes.razor",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Components\\Routes.razor",
+              "RelativeToolTip": "TriviaGame\\Components\\Routes.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T00:09:45.046Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "QuestionService.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Features\\QuestionService.cs",
+              "RelativeDocumentMoniker": "CoreLibrary\\Features\\QuestionService.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Features\\QuestionService.cs",
+              "RelativeToolTip": "CoreLibrary\\Features\\QuestionService.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAADwv0MAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T02:28:38.154Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "SqlQueries.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\domain\\Querys\\SqlQueries.cs",
+              "RelativeDocumentMoniker": "domain\\Querys\\SqlQueries.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\domain\\Querys\\SqlQueries.cs",
+              "RelativeToolTip": "domain\\Querys\\SqlQueries.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAIAxwC0AAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-26T22:35:49.509Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "QuestionProfile.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Mappings\\QuestionProfile.cs",
+              "RelativeDocumentMoniker": "CoreLibrary\\Mappings\\QuestionProfile.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Mappings\\QuestionProfile.cs",
+              "RelativeToolTip": "CoreLibrary\\Mappings\\QuestionProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T03:18:51.965Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IQueryService.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\domain\\Querys\\Interface\\IQueryService.cs",
+              "RelativeDocumentMoniker": "domain\\Querys\\Interface\\IQueryService.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\domain\\Querys\\Interface\\IQueryService.cs",
+              "RelativeToolTip": "domain\\Querys\\Interface\\IQueryService.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAewAgAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T03:24:49.633Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "IPlayerHttpClient.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Interface\\Services\\Client\\IPlayerHttpClient.cs",
+              "RelativeDocumentMoniker": "CoreLibrary\\Interface\\Services\\Client\\IPlayerHttpClient.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Interface\\Services\\Client\\IPlayerHttpClient.cs",
+              "RelativeToolTip": "CoreLibrary\\Interface\\Services\\Client\\IPlayerHttpClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-26T22:40:09.905Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Components\\App.razor",
+              "RelativeDocumentMoniker": "TriviaGame\\Components\\App.razor",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\TriviaGame\\Components\\App.razor",
+              "RelativeToolTip": "TriviaGame\\Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T00:08:57.919Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Player.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\domain\\Entities\\Player.cs",
+              "RelativeDocumentMoniker": "domain\\Entities\\Player.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\domain\\Entities\\Player.cs",
+              "RelativeToolTip": "domain\\Entities\\Player.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAYAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T01:44:43.175Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "IPlayerService.cs",
+              "DocumentMoniker": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Interface\\Services\\IPlayerService.cs",
+              "RelativeDocumentMoniker": "CoreLibrary\\Interface\\Services\\IPlayerService.cs",
+              "ToolTip": "C:\\PROYECTOS\\TriviaGame.Solution\\CoreLibrary\\Interface\\Services\\IPlayerService.cs",
+              "RelativeToolTip": "CoreLibrary\\Interface\\Services\\IPlayerService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAMwAsAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-26T22:34:28.535Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
