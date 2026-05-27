@@ -68,5 +68,9 @@ public class SqlQueries
     WHERE S.Status = 'Won'
     ORDER BY S.AccumulatedPrize DESC";
 
-
+    public static string GetPoints => @"
+        SELECT 
+            Points 
+        FROM Categories 
+        WHERE DifficultyLevel = @Level";
 }

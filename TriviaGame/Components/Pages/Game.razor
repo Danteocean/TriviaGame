@@ -1,4 +1,5 @@
 @page "/game"
+@rendermode InteractiveServer
 @using Microsoft.AspNetCore.WebUtilities
 @using CoreLibrary.DTOs.GameSession.Requests
 @using CoreLibrary.DTOs.GameSession.Response
@@ -8,120 +9,172 @@
 @inject NavigationManager NavManager
 
 <div class="game-page">
-    <div class="game-card">
-        <div class="game-header">
-            <h1>Pregunta actual</h1>
-        </div>
+	<div class="game-card">
+		<div class="game-header">
+			<h1>Pregunta actual</h1>
+			<span class="score-badge">Puntaje: @currentScore</span>
+		</div>
 
-        @if (errorMessage != string.Empty)
-        {
-            <div class="alert alert-danger">@errorMessage</div>
-        }
+		@if (!string.IsNullOrEmpty(errorMessage))
+		{
+			<div class="alert alert-danger">@errorMessage</div>
+		}
 
-        @if (currentQuestion == null)
-        {
-            <p>Cargando pregunta...</p>
-        }
-        else
-        {
-            <div class="question-panel">
-                <p class="question-text">@currentQuestion.Text</p>
-            </div>
+		@if (currentQuestion == null)
+		{
+			<p>Cargando pregunta...</p>
+		}
+		else
+		{
+			<div class="question-panel">
+				<p class="question-text">@currentQuestion.Text</p>
+			</div>
 
-            <p>ID seleccionado: @selectedOptionId</p>
+			<div class="options-grid">
+				@foreach (var option in currentQuestion.Options)
+				{
+					<button class="option-btn @(selectedOptionId == option.OptionId ? "selected" : "")"
+							@onclick="() => SelectOption(option.OptionId)">
+						@option.Text
+					</button>
+				}
+			</div>
 
-            <div class="options-grid">
-                @foreach (var option in currentQuestion.Options)
-                {
-                    <button class="option-btn @(selectedOptionId == option.OptionId ? "selected" : "")"
-                            @onclick="() => SelectOption(option.OptionId)">
-                        @option.Text
-                    </button>
-                }
-            </div>
+			@if (selectedOptionId != -1)
+			{
+				<div class="confirm-panel">
+					<p>¿Estás seguro de esta respuesta?</p>
+					<button class="btn-primary"
+							@onclick="HandleConfirmSubmit"
+							disabled="@(isSubmitting ? "disabled" : null)">
+						@(isSubmitting ? "Enviando..." : "Confirmar respuesta")
+					</button>
+					<button class="btn-secondary" @onclick="ClearSelection">Cambiar</button>
+				</div>
+			}
 
-            
-            @if (selectedOptionId != -1)
-            {
-                <div class="confirm-panel" style="margin-top: 20px; padding: 15px; border: 1px solid #ccc;">
-                    <p>¿Estás seguro de esta respuesta?</p>
-                    <button class="btn-primary" @onclick="HandleConfirmSubmit" disabled="@isSubmitting">
-                        @(isSubmitting ? "Enviando..." : "Confirmar respuesta")
-                    </button>
-                    <button class="btn-secondary" @onclick="ClearSelection">Cambiar</button>
-                </div>
-            }
-
-            <div class="actions-row" style="margin-top: 20px;">
-                <button class="btn-danger" @onclick="HandleWithdraw">Retirarse</button>
-            </div>
-        }
-    </div>
+			<div class="actions-row">
+				<button class="btn-danger"
+						@onclick="HandleWithdraw"
+						disabled="@(isSubmitting ? "disabled" : null)">
+					Retirarse
+				</button>
+			</div>
+		}
+	</div>
 </div>
 
 @code {
-    private Guid sessionId;
-    private QuestionDtoResponse? currentQuestion;
-    private int selectedOptionId = -1; // Inicializado en -1
-    private bool isSubmitting;
-    private string errorMessage = string.Empty;
+	private Guid sessionId;
+	private QuestionDtoResponse? currentQuestion;
+	private int selectedOptionId = -1;
+	private int currentScore = 0;
+	private bool isSubmitting = false;
+	private string errorMessage = string.Empty;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-        var alias = QueryHelpers.ParseQuery(uri.Query).TryGetValue("alias", out var val) ? val.ToString() : string.Empty;
+	protected override async Task OnInitializedAsync()
+	{
+		var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+		var alias = QueryHelpers.ParseQuery(uri.Query)
+			.TryGetValue("alias", out var val) ? val.ToString() : string.Empty;
 
-        var playerResp = await PlayerService.EnterGameAsync(alias);
-        var sessionResp = await GameClient.StartGameAsync(playerResp.Data.Id);
+		var playerResp = await PlayerService.EnterGameAsync(alias);
+		if (!playerResp.Succeeded || playerResp.Data == null)
+		{
+			errorMessage = "No se pudo iniciar sesión del jugador.";
+			return;
+		}
 
-        sessionId = sessionResp.Data;
-        await LoadNextQuestionAsync();
-    }
+		var sessionResp = await GameClient.StartGameAsync(playerResp.Data.Id);
+		if (!sessionResp.Succeeded)
+		{
+			errorMessage = "No se pudo iniciar la partida.";
+			return;
+		}
 
-    private async Task LoadNextQuestionAsync()
-    {
-        var next = await GameClient.GetNextQuestionAsync(sessionId);
-        if (next.Succeeded && next.Data != null)
-        {
-            currentQuestion = System.Text.Json.JsonSerializer.Deserialize<QuestionDtoResponse>(
-                System.Text.Json.JsonSerializer.Serialize(next.Data)
-            );
-            selectedOptionId = -1;
-            StateHasChanged();
-        }
-    }
+		sessionId = sessionResp.Data;
+		await LoadNextQuestionAsync();
+	}
 
-    private void SelectOption(int optionId)
-    {
-        selectedOptionId = optionId;
-        StateHasChanged(); 
-    }
+	private async Task LoadNextQuestionAsync()
+	{
+		var next = await GameClient.GetNextQuestionAsync(sessionId);
 
-    private void ClearSelection()
-    {
-        selectedOptionId = -1;
-        StateHasChanged();
-    }
+		if (next.Succeeded && next.Data != null)
+		{
+			currentQuestion = next.Data;
+			selectedOptionId = -1;
+			StateHasChanged();
+		}
+		else
+		{
+			// Sin más preguntas = ganó todo
+			NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=win&score={currentScore}", true);
+		}
+	}
 
-    private async Task HandleConfirmSubmit()
-    {
-        isSubmitting = true;
-        var result = await GameClient.SubmitAnswerAsync(new AnswerDtoRequest { SessionId = sessionId, OptionId = selectedOptionId });
+	private void SelectOption(int optionId)
+	{
+		Console.WriteLine($"SelectOption llamado con: {optionId}");
+		selectedOptionId = optionId;
+		StateHasChanged();
+	}
 
-        if (result.Succeeded)
-        {
-            await LoadNextQuestionAsync();
-        }
-        else
-        {
-            NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=lose", true);
-        }
-        isSubmitting = false;
-    }
+	private void ClearSelection()
+	{
+		selectedOptionId = -1;
+		StateHasChanged();
+	}
 
-    private async Task HandleWithdraw()
-    {
-        await GameClient.WithdrawAsync(sessionId);
-        NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=retired", true);
-    }
+	private async Task HandleConfirmSubmit()
+	{
+		if (selectedOptionId == -1 || isSubmitting) return;
+
+		isSubmitting = true;
+		errorMessage = string.Empty;
+		StateHasChanged();
+
+		var result = await GameClient.SubmitAnswerAsync(new AnswerDtoRequest
+		{
+			SessionId = sessionId,
+			OptionId = selectedOptionId
+		});
+
+		if (!result.Succeeded)
+		{
+			errorMessage = "Error al enviar la respuesta. Intenta de nuevo.";
+			isSubmitting = false;
+			StateHasChanged();
+			return;
+		}
+
+		// IsGameOver = false → respuesta correcta, continúa el juego
+		// IsGameOver = true  → respuesta incorrecta, pierde todo
+		if (!result.Data.IsGameOver && result.Data.IsCorrect)
+		{
+			currentScore = (int)result.Data.AccumulatedPrize;
+			await LoadNextQuestionAsync();
+		}
+		else if (result.Data.IsGameOver && result.Data.IsCorrect)
+		{
+			NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=win&score={currentScore}", true);
+		}
+		else
+		{
+			NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=lose&score=0", true);
+		}
+
+		isSubmitting = false;
+	}
+
+	private async Task HandleWithdraw()
+	{
+		Console.WriteLine("HandleWithdraw llamado");
+		isSubmitting = true;
+		StateHasChanged();
+
+		await GameClient.WithdrawAsync(sessionId);
+
+		NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=retired&score={currentScore}", true);
+	}
 }

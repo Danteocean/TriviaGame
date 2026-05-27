@@ -38,7 +38,7 @@ public class GameSessionService : IGameSessionService
             return new Response<GameResultDtoResponse>(null)
             { State = "NoData", Message = ex.Message, Succeeded = false };
         }
-       
+
     }
 
     public async Task<Response<QuestionDtoResponse>> GetNextQuestionAsync(Guid sessionId)
@@ -76,15 +76,20 @@ public class GameSessionService : IGameSessionService
 
     public async Task<Response<GameResultDtoResponse>> SubmitAnswerAsync(AnswerDtoRequest request)
     {
-        var (sessionData, _) = await _unitOfWork.Queries.QueryAsync<dynamic>(SqlQueries.GetGameSessionById, new { Id = request.SessionId });
-        var sessionEntity = sessionData?.FirstOrDefault();
+        var sessionEntity = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<GameSession>(
+            SqlQueries.GetGameSessionById,
+            new { Id = request.SessionId });
 
-        if (sessionEntity == null)
+        if (sessionEntity.Data == null)
         {
             return new Response<GameResultDtoResponse>(null) { Message = "Sesión no encontrada", Succeeded = false };
         }
-           
-        var isCorrect = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<bool>(SqlQueries.CheckIfAnswerIsCorrect, new { OptionId = request.OptionId });
+
+        var entity = sessionEntity.Data;
+
+        var isCorrect = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<bool>(
+            SqlQueries.CheckIfAnswerIsCorrect,
+            new { OptionId = request.OptionId });
 
         await _unitOfWork.BeginTransactionAsync();
 
@@ -92,8 +97,8 @@ public class GameSessionService : IGameSessionService
         {
             if (!isCorrect.Data)
             {
-                sessionEntity.IdStatus = 3;
-                await _unitOfWork.Repository<GameSession>().UpdateAsync(sessionEntity);
+                entity.IdStatus = 3;
+                await _unitOfWork.Repository<GameSession>().UpdateAsync(entity);
                 await _unitOfWork.CommitnAsync();
 
                 return new Response<GameResultDtoResponse>(new GameResultDtoResponse
@@ -104,25 +109,38 @@ public class GameSessionService : IGameSessionService
                 { Succeeded = true };
             }
 
-            // 3. Lógica de avance: Incrementar ronda y premio
-            sessionEntity.CurrentRound++;
-            sessionEntity.AccumulatedPrize += 1000;
 
-            // Si supera la ronda 5, gana el juego
-            if (sessionEntity.CurrentRound > 5)
+            var prizeResult = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<decimal>(
+                SqlQueries.GetPoints,
+                new { Level = entity.CurrentRound });
+
+            // 4. Lógica de avance
+            entity.AccumulatedPrize += prizeResult.Data;
+
+
+
+            bool isGameOver = false;
+            if (entity.CurrentRound == 5)
             {
-                sessionEntity.Status = "Won";
+                entity.IdStatus = 4;
+                isGameOver = true;
+
+            }
+            if (entity.IdStatus != 4)
+            {
+                entity.CurrentRound++;
             }
 
-            await _unitOfWork.Repository<GameSession>().UpdateAsync(sessionEntity);
+            // Persistir cambios
+            await _unitOfWork.Repository<GameSession>().UpdateAsync(entity);
             await _unitOfWork.CommitnAsync();
 
             return new Response<GameResultDtoResponse>(new GameResultDtoResponse
             {
                 IsCorrect = true,
-                IsGameOver = sessionEntity.Status == "Won" || sessionEntity.Status == "Lost",
-                CurrentRound = sessionEntity.CurrentRound,
-                AccumulatedPrize = sessionEntity.AccumulatedPrize
+                IsGameOver = isGameOver,
+                CurrentRound = entity.CurrentRound,
+                AccumulatedPrize = entity.AccumulatedPrize
             })
             { Succeeded = true };
         }
@@ -148,7 +166,7 @@ public class GameSessionService : IGameSessionService
             await _unitOfWork.RollbackAsync();
             return new Response<Guid>(playerId) { Message = ex.Message, Succeeded = false };
         }
-        
+
     }
 
     public async Task<Response<bool>> WithdrawAsync(Guid sessionId)
@@ -165,7 +183,7 @@ public class GameSessionService : IGameSessionService
             await _unitOfWork.RollbackAsync();
             return new Response<bool>(false) { Message = ex.Message, Succeeded = false };
         }
-      
+
     }
 
     public async Task<Response<bool>> EndGameAsync(EndGameRequest request)
@@ -200,7 +218,7 @@ public class GameSessionService : IGameSessionService
             await _unitOfWork.RollbackAsync();
             return new Response<bool>(false) { Succeeded = false, Message = ex.Message };
         }
-      
-       
+
+
     }
 }

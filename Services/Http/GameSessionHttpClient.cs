@@ -18,14 +18,7 @@ public class GameSessionHttpClient : IGameSessionHttpClient
         return await res.Content.ReadFromJsonAsync<Response<Guid>>()
                ?? new Response<Guid>(Guid.Empty) { Message = "Error al crear sesi�n", Succeeded = false };
     }
-
-    public async Task<Response<bool>> SubmitAnswerAsync(AnswerDtoRequest request)
-    {
-        var res = await _httpClient.PostAsJsonAsync("GameSession/SubmitAnswer", request);
-        return await res.Content.ReadFromJsonAsync<Response<bool>>() ?? new Response<bool>(false);
-    }
-
-    public async Task<Response<GameResultDtoResponse>> SubmitAnswerWithResultAsync(AnswerDtoRequest request)
+    public async Task<Response<GameResultDtoResponse>> SubmitAnswerAsync(AnswerDtoRequest request)
     {
         var res = await _httpClient.PostAsJsonAsync("GameSession/SubmitAnswer", request);
         return await res.Content.ReadFromJsonAsync<Response<GameResultDtoResponse>>()
