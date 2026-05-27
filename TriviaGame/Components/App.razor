@@ -4,10 +4,11 @@
     <meta charset="utf-8" />
     <base href="/" />
     <link rel="stylesheet" href="app.css" />
-    <HeadOutlet />
+    <link rel="stylesheet" href="TriviaGame.styles.css" />
+    <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 <body>
-    <Routes />
+    <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
 </body>
 </html>

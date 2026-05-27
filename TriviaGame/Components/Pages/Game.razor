@@ -9,172 +9,358 @@
 @inject NavigationManager NavManager
 
 <div class="game-page">
-	<div class="game-card">
-		<div class="game-header">
-			<h1>Pregunta actual</h1>
-			<span class="score-badge">Puntaje: @currentScore</span>
-		</div>
 
-		@if (!string.IsNullOrEmpty(errorMessage))
-		{
-			<div class="alert alert-danger">@errorMessage</div>
-		}
+    @* ── Feedback Overlay ── *@
+    @if (feedbackState != null)
+    {
+        <div class="feedback-overlay">
+            <div class="feedback-card">
+                <div class="feedback-icon">@feedbackState.Icon</div>
+                <h2 class="feedback-title @feedbackState.CssClass">@feedbackState.Title</h2>
+                <p class="feedback-msg">@feedbackState.Message</p>
 
-		@if (currentQuestion == null)
-		{
-			<p>Cargando pregunta...</p>
-		}
-		else
-		{
-			<div class="question-panel">
-				<p class="question-text">@currentQuestion.Text</p>
-			</div>
+                @if (feedbackState.ShowCorrectReveal)
+                {
+                    <div class="feedback-reveal">
+                        La respuesta correcta era: <strong>@feedbackState.CorrectAnswerText</strong>
+                    </div>
+                }
 
-			<div class="options-grid">
-				@foreach (var option in currentQuestion.Options)
-				{
-					<button class="option-btn @(selectedOptionId == option.OptionId ? "selected" : "")"
-							@onclick="() => SelectOption(option.OptionId)">
-						@option.Text
-					</button>
-				}
-			</div>
+                <div class="feedback-prize">@feedbackState.PrizeText</div>
 
-			@if (selectedOptionId != -1)
-			{
-				<div class="confirm-panel">
-					<p>¿Estás seguro de esta respuesta?</p>
-					<button class="btn-primary"
-							@onclick="HandleConfirmSubmit"
-							disabled="@(isSubmitting ? "disabled" : null)">
-						@(isSubmitting ? "Enviando..." : "Confirmar respuesta")
-					</button>
-					<button class="btn-secondary" @onclick="ClearSelection">Cambiar</button>
-				</div>
-			}
+                <button class="btn-continue" @onclick="ContinueAfterFeedback">
+                    @feedbackState.ButtonText
+                </button>
+            </div>
+        </div>
+    }
 
-			<div class="actions-row">
-				<button class="btn-danger"
-						@onclick="HandleWithdraw"
-						disabled="@(isSubmitting ? "disabled" : null)">
-					Retirarse
-				</button>
-			</div>
-		}
-	</div>
+    <div class="game-layout">
+
+        @* ── Header ── *@
+        <div class="game-header">
+            <div class="round-info">
+                <span class="round-badge">Ronda @currentRound de 5</span>
+                <span class="category-label">@CategoryName</span>
+            </div>
+            <div class="accumulated">
+                <div class="accumulated-label">Acumulado</div>
+                <div class="accumulated-value">@FormatPrize(currentScore)</div>
+            </div>
+        </div>
+
+        @* ── Left spacer (desktop) ── *@
+        <div class="spacer"></div>
+
+        @* ── Question card ── *@
+        <div class="question-card">
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+
+            @if (currentQuestion == null)
+            {
+                <div class="loading-panel">
+                    <div class="spinner"></div>
+                    <p>Cargando pregunta...</p>
+                </div>
+            }
+            else
+            {
+                <p class="question-text">@currentQuestion.Text</p>
+
+                <div class="options-grid">
+                    @for (int i = 0; i < currentQuestion.Options.Count; i++)
+                    {
+                        var option = currentQuestion.Options[i];
+                        var letter = Letters[i];
+                        <button class="option-btn @GetOptionClass(option.OptionId)"
+                                @onclick="() => SelectOption(option.OptionId)"
+                                disabled="@isSubmitting">
+                            <span class="option-letter">@letter</span>
+                            <span>@option.Text</span>
+                        </button>
+                    }
+                </div>
+
+                <div class="action-bar">
+                    <button class="btn-retire" @onclick="OpenRetireModal" disabled="@isSubmitting">
+                        Retirarme
+                    </button>
+                    <button class="btn-confirm @(selectedOptionId != -1 ? "visible" : "")"
+                            @onclick="HandleConfirmSubmit"
+                            disabled="@isSubmitting">
+                        @(isSubmitting ? "Enviando..." : "Confirmar respuesta")
+                    </button>
+                </div>
+            }
+        </div>
+
+        @* ── Prize ladder ── *@
+        <div class="prize-ladder">
+            @for (int r = 5; r >= 1; r--)
+            {
+                <div class="prize-ladder-item @GetLadderClass(r)">
+                    <span class="prize-rn">R@(r)</span>
+                    <span class="prize-amt">@FormatPrize(PrizeAmounts[r - 1])</span>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@* ── Retire Modal ── *@
+<div class="modal-overlay @(showRetireModal ? "open" : "")">
+    <div class="modal-box">
+        <h3>¿Seguro que quieres retirarte?</h3>
+        <p>
+            @if (currentScore > 0)
+            {
+                <span>Te llevarás <strong>@FormatPrize(currentScore)</strong> acumulados hasta ahora.</span>
+            }
+            else
+            {
+                <span>Aún no has acumulado ningún premio.</span>
+            }
+        </p>
+        <div class="modal-actions">
+            <button class="btn-cancel" @onclick="CancelRetire">Seguir jugando</button>
+            <button class="btn-do-retire" @onclick="HandleWithdraw">Retirarme</button>
+        </div>
+    </div>
 </div>
 
 @code {
-	private Guid sessionId;
-	private QuestionDtoResponse? currentQuestion;
-	private int selectedOptionId = -1;
-	private int currentScore = 0;
-	private bool isSubmitting = false;
-	private string errorMessage = string.Empty;
+    private Guid sessionId;
+    private QuestionDtoResponse? currentQuestion;
+    private int selectedOptionId = -1;
+    private string? selectedOptionText;
+    private int currentRound = 1;
+    private decimal currentScore = 0;
+    private bool isSubmitting = false;
+    private bool showRetireModal = false;
+    private string errorMessage = string.Empty;
+    private FeedbackState? feedbackState;
 
-	protected override async Task OnInitializedAsync()
-	{
-		var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-		var alias = QueryHelpers.ParseQuery(uri.Query)
-			.TryGetValue("alias", out var val) ? val.ToString() : string.Empty;
+    private static readonly decimal[] PrizeAmounts = { 100, 500, 1000, 5000, 10000 };
+    private static readonly string[] CategoryNames = {
+        "Conocimiento General", "Ciencias", "Historia", "Tecnología", "Cultura Avanzada"
+    };
+    private static readonly string[] Letters = { "A", "B", "C", "D" };
 
-		var playerResp = await PlayerService.EnterGameAsync(alias);
-		if (!playerResp.Succeeded || playerResp.Data == null)
-		{
-			errorMessage = "No se pudo iniciar sesión del jugador.";
-			return;
-		}
+    private string CategoryName => currentRound >= 1 && currentRound <= CategoryNames.Length
+        ? CategoryNames[currentRound - 1] : "";
 
-		var sessionResp = await GameClient.StartGameAsync(playerResp.Data.Id);
-		if (!sessionResp.Succeeded)
-		{
-			errorMessage = "No se pudo iniciar la partida.";
-			return;
-		}
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        var alias = QueryHelpers.ParseQuery(uri.Query)
+            .TryGetValue("alias", out var val) ? val.ToString() : string.Empty;
 
-		sessionId = sessionResp.Data;
-		await LoadNextQuestionAsync();
-	}
+        var playerResp = await PlayerService.EnterGameAsync(alias);
+        if (!playerResp.Succeeded || playerResp.Data == null)
+        {
+            errorMessage = "No se pudo iniciar sesión del jugador.";
+            return;
+        }
 
-	private async Task LoadNextQuestionAsync()
-	{
-		var next = await GameClient.GetNextQuestionAsync(sessionId);
+        var sessionResp = await GameClient.StartGameAsync(playerResp.Data.Id);
+        if (!sessionResp.Succeeded)
+        {
+            errorMessage = "No se pudo iniciar la partida.";
+            return;
+        }
 
-		if (next.Succeeded && next.Data != null)
-		{
-			currentQuestion = next.Data;
-			selectedOptionId = -1;
-			StateHasChanged();
-		}
-		else
-		{
-			// Sin más preguntas = ganó todo
-			NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=win&score={currentScore}", true);
-		}
-	}
+        sessionId = sessionResp.Data;
+        await LoadNextQuestionAsync();
+    }
 
-	private void SelectOption(int optionId)
-	{
-		Console.WriteLine($"SelectOption llamado con: {optionId}");
-		selectedOptionId = optionId;
-		StateHasChanged();
-	}
+    private async Task LoadNextQuestionAsync()
+    {
+        var next = await GameClient.GetNextQuestionAsync(sessionId);
 
-	private void ClearSelection()
-	{
-		selectedOptionId = -1;
-		StateHasChanged();
-	}
+        if (next.Succeeded && next.Data != null)
+        {
+            currentQuestion = next.Data;
+            selectedOptionId = -1;
+            selectedOptionText = null;
+            isSubmitting = false;
+            feedbackState = null;
+            StateHasChanged();
+        }
+        else
+        {
+            NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=win&score={currentScore}&rounds={currentRound}", true);
+        }
+    }
 
-	private async Task HandleConfirmSubmit()
-	{
-		if (selectedOptionId == -1 || isSubmitting) return;
+    private void SelectOption(int optionId)
+    {
+        if (isSubmitting) return;
+        selectedOptionId = optionId;
+        if (currentQuestion != null)
+        {
+            var opt = currentQuestion.Options.FirstOrDefault(o => o.OptionId == optionId);
+            selectedOptionText = opt?.Text;
+        }
+        StateHasChanged();
+    }
 
-		isSubmitting = true;
-		errorMessage = string.Empty;
-		StateHasChanged();
+    private async Task HandleConfirmSubmit()
+    {
+        if (selectedOptionId == -1 || isSubmitting) return;
 
-		var result = await GameClient.SubmitAnswerAsync(new AnswerDtoRequest
-		{
-			SessionId = sessionId,
-			OptionId = selectedOptionId
-		});
+        isSubmitting = true;
+        errorMessage = string.Empty;
+        StateHasChanged();
 
-		if (!result.Succeeded)
-		{
-			errorMessage = "Error al enviar la respuesta. Intenta de nuevo.";
-			isSubmitting = false;
-			StateHasChanged();
-			return;
-		}
+        var result = await GameClient.SubmitAnswerAsync(new AnswerDtoRequest
+        {
+            SessionId = sessionId,
+            OptionId = selectedOptionId
+        });
 
-		// IsGameOver = false → respuesta correcta, continúa el juego
-		// IsGameOver = true  → respuesta incorrecta, pierde todo
-		if (!result.Data.IsGameOver && result.Data.IsCorrect)
-		{
-			currentScore = (int)result.Data.AccumulatedPrize;
-			await LoadNextQuestionAsync();
-		}
-		else if (result.Data.IsGameOver && result.Data.IsCorrect)
-		{
-			NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=win&score={currentScore}", true);
-		}
-		else
-		{
-			NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=lose&score=0", true);
-		}
+        if (!result.Succeeded || result.Data == null)
+        {
+            errorMessage = "Error al enviar la respuesta. Intenta de nuevo.";
+            isSubmitting = false;
+            StateHasChanged();
+            return;
+        }
 
-		isSubmitting = false;
-	}
+        var isCorrect = result.Data.IsCorrect;
+        var gameOver = result.Data.IsGameOver;
+        var prize = result.Data.AccumulatedPrize;
 
-	private async Task HandleWithdraw()
-	{
-		Console.WriteLine("HandleWithdraw llamado");
-		isSubmitting = true;
-		StateHasChanged();
+        if (gameOver && !isCorrect)
+        {
+            feedbackState = new FeedbackState
+            {
+                Icon = "❌",
+                Title = "¡Incorrecto!",
+                CssClass = "wrong",
+                Message = "Perdiste todo el acumulado",
+                ShowCorrectReveal = false,
+                CorrectAnswerText = null,
+                PrizeText = "Premio acumulado: $0",
+                ButtonText = "Ver resultado",
+                Outcome = "lose",
+                FinalScore = 0
+            };
+            StateHasChanged();
+            return;
+        }
 
-		await GameClient.WithdrawAsync(sessionId);
+        if (gameOver && isCorrect)
+        {
+            currentScore = prize;
+            currentRound = result.Data.CurrentRound;
+            feedbackState = new FeedbackState
+            {
+                Icon = "🏆",
+                Title = "¡Correcto!",
+                CssClass = "correct",
+                Message = "¡Completaste las 5 rondas!",
+                ShowCorrectReveal = false,
+                PrizeText = $"Premio total: {FormatPrize(prize)}",
+                ButtonText = "Ver resultado →",
+                Outcome = "win",
+                FinalScore = prize
+            };
+            StateHasChanged();
+            return;
+        }
 
-		NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=retired&score={currentScore}", true);
-	}
+        currentScore = prize;
+        currentRound = result.Data.CurrentRound;
+        feedbackState = new FeedbackState
+        {
+            Icon = "✅",
+            Title = "¡Correcto!",
+            CssClass = "correct",
+            Message = $"Avanzas a la Ronda {currentRound}",
+            ShowCorrectReveal = false,
+            PrizeText = $"+{FormatPrize(PrizeAmounts[currentRound - 2])}  ·  Acumulado: {FormatPrize(currentScore)}",
+            ButtonText = "Continuar →",
+            Outcome = "continue",
+            FinalScore = currentScore
+        };
+        StateHasChanged();
+    }
+
+    private async Task ContinueAfterFeedback()
+    {
+        if (feedbackState == null) return;
+
+        var outcome = feedbackState.Outcome;
+
+        if (outcome == "win")
+        {
+            NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=win&score={feedbackState.FinalScore}&rounds={currentRound}", true);
+        }
+        else if (outcome == "lose")
+        {
+            NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=lose&score=0&rounds={currentRound}", true);
+        }
+        else
+        {
+            await LoadNextQuestionAsync();
+        }
+    }
+
+    private async Task HandleWithdraw()
+    {
+        showRetireModal = false;
+        isSubmitting = true;
+        StateHasChanged();
+
+        await GameClient.WithdrawAsync(sessionId);
+
+        NavManager.NavigateTo($"/result?sessionId={sessionId}&outcome=retired&score={currentScore}&rounds={currentRound}", true);
+    }
+
+    private void OpenRetireModal()
+    {
+        showRetireModal = true;
+        StateHasChanged();
+    }
+
+    private void CancelRetire()
+    {
+        showRetireModal = false;
+        StateHasChanged();
+    }
+
+    private string GetOptionClass(int optionId)
+    {
+        return selectedOptionId == optionId ? "selected" : "";
+    }
+
+    private string GetLadderClass(int round)
+    {
+        if (round == currentRound) return "active";
+        if (round < currentRound) return "won-round";
+        return "";
+    }
+
+    private static string FormatPrize(decimal amount)
+    {
+        return $"${amount:N0}";
+    }
+
+    private class FeedbackState
+    {
+        public string Icon { get; set; } = "";
+        public string Title { get; set; } = "";
+        public string CssClass { get; set; } = "";
+        public string Message { get; set; } = "";
+        public bool ShowCorrectReveal { get; set; }
+        public string? CorrectAnswerText { get; set; }
+        public string PrizeText { get; set; } = "";
+        public string ButtonText { get; set; } = "";
+        public string Outcome { get; set; } = "";
+        public decimal FinalScore { get; set; }
+    }
 }

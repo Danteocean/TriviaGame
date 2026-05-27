@@ -25,19 +25,42 @@
         }
         else
         {
-            <div class="result-badge @resultClass">@resultTitle</div>
-            <h1>@resultHeadline</h1>
-            <p class="result-details">@resultDescription</p>
+            @if (outcome == "win")
+            {
+                <div class="confetti-wrap">
+                    @for (int i = 0; i < 60; i++)
+                    {
+                        var style = $"left:{RandomPercent()}%;" +
+                                    $"background:{RandomColor()};" +
+                                    $"animation-delay:{RandomDelay()}s;" +
+                                    $"animation-duration:{RandomDuration()}s;" +
+                                    $"width:{RandomSize()}px;height:{RandomSize()}px;";
+                        <div class="confetti-piece" style="@style"></div>
+                    }
+                </div>
+                <div class="end-icon">🏆</div>
+                <h2 class="end-title won">¡GANASTE!</h2>
+                <p class="end-subtitle">Respondiste las @displayRound rondas correctamente</p>
+                <div class="end-prize won">@FormatPrize(displayScore)</div>
+            }
+            else if (outcome == "lose")
+            {
+                <div class="end-icon">💥</div>
+                <h2 class="end-title elim">ELIMINADO</h2>
+                <p class="end-subtitle">Respuesta incorrecta — pierdes todo el acumulado</p>
+                <div class="end-prize elim">$0</div>
+            }
+            else
+            {
+                <div class="end-icon">🚪</div>
+                <h2 class="end-title retired">RETIRADO</h2>
+                <p class="end-subtitle">Decidiste retirarte antes de responder</p>
+                <div class="end-prize ret">@FormatPrize(displayScore)</div>
+            }
 
-            <div class="stat-grid">
-                <div>
-                    <span class="stat-label">Puntaje acumulado</span>
-                    <span class="stat-value">@displayScore</span>
-                </div>
-                <div>
-                    <span class="stat-label">Ronda alcanzada</span>
-                    <span class="stat-value">@displayRound</span>
-                </div>
+            <div class="result-stat">
+                <span class="result-stat-label">Ronda alcanzada</span>
+                <span class="result-stat-value">@displayRound de 5</span>
             </div>
 
             <div class="result-actions">
@@ -58,10 +81,8 @@
     private string outcome = string.Empty;
     private decimal displayScore;
     private int displayRound;
-    private string resultTitle = string.Empty;
-    private string resultHeadline = string.Empty;
-    private string resultDescription = string.Empty;
-    private string resultClass = string.Empty;
+
+    private static readonly Random _rng = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,6 +102,8 @@
             return;
         }
 
+        displayRound = query.TryGetValue("rounds", out var roundVal) && int.TryParse(roundVal.ToString(), out var r) ? r : 1;
+
         var sessionResp = await GameClient.GetSessionByIdAsync(sessionId);
         if (!sessionResp.Succeeded || sessionResp.Data == null)
         {
@@ -88,31 +111,8 @@
             return;
         }
 
-        displayScore = sessionResp.Data.AccumulatedPrize;
-        displayRound = sessionResp.Data.CurrentRound;
-
-        if (outcome == "retired")
-        {
-            resultClass = "result-retired";
-            resultTitle = "Te retiraste";
-            resultHeadline = "¡Buen retiro!";
-            resultDescription = "Te llevas el premio acumulado hasta ahora.";
-        }
-        else if (outcome == "lose")
-        {
-            resultClass = "result-lose";
-            resultTitle = "Perdiste";
-            resultHeadline = "Respuesta incorrecta";
-            resultDescription = "No te preocupes, puedes intentarlo de nuevo.";
-            displayScore = 0;
-        }
-        else
-        {
-            resultClass = "result-win";
-            resultTitle = "¡Ganaste!";
-            resultHeadline = "Triunfaste en el juego.";
-            resultDescription = "Alcanzaste el final y ganaste el premio mayor.";
-        }
+        displayScore = outcome == "lose" ? 0 : sessionResp.Data.AccumulatedPrize;
+        if (displayRound == 1) displayRound = sessionResp.Data.CurrentRound;
 
         isLoading = false;
     }
@@ -132,5 +132,20 @@
     private void PlayAgain()
     {
         NavManager.NavigateTo("/");
+    }
+
+    private static string FormatPrize(decimal amount)
+    {
+        return $"${amount:N0}";
+    }
+
+    private static string RandomPercent() => $"{_rng.Next(0, 101)}";
+    private static string RandomDelay() => $"{_rng.NextDouble() * 2:F1}";
+    private static string RandomDuration() => $"{2 + _rng.NextDouble() * 2:F1}";
+    private static string RandomSize() => $"{6 + _rng.Next(10)}";
+    private static string RandomColor()
+    {
+        var colors = new[] { "#fbbf24", "#22c55e", "#60a5fa", "#f97316", "#a78bfa", "#ffffff" };
+        return colors[_rng.Next(colors.Length)];
     }
 }
