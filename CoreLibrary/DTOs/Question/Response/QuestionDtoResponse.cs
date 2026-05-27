@@ -5,6 +5,7 @@ public class QuestionDtoResponse
     public int QuestionId { get; set; }
     public string Text { get; set; } = string.Empty;
     public int CategoryId { get; set; }
+    public int Points { get; set; }
     public List<OptionDtoResponse> Options { get; set; } = new();
 }
 

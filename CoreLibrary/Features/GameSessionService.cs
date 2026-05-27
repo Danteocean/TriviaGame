@@ -50,28 +50,32 @@ public class GameSessionService : IGameSessionService
 
             if (session == null) return new Response<QuestionDtoResponse>(null) { Message = "Sesión no encontrada" };
 
-            var question = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<QuestionDtoResponse>(SqlQueries.GetRandomQuestionByLevel, new { Level = session.CurrentRound });
+            var questionResult = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<QuestionDtoResponse>(SqlQueries.GetRandomQuestionByLevel, new { Level = session.CurrentRound });
 
-            if (question.Data != null)
+            if (questionResult.Data != null)
             {
-                var options = await _unitOfWork.Queries.QueryAsync<OptionDtoResponse>(SqlQueries.GetOptionsByQuestion, new { QuestionId = question.Data.QuestionId });
 
-                question.Data.Options = _mapper.Map<List<OptionDtoResponse>>(options.Data);
+                var optionsResult = await _unitOfWork.Queries.QueryAsync<OptionDtoResponse>(SqlQueries.GetOptionsByQuestion, new { QuestionId = questionResult.Data.QuestionId });
+
+
+                questionResult.Data.Options = optionsResult.Data.ToList();
             }
 
-            return new Response<QuestionDtoResponse>(_mapper.Map<QuestionDtoResponse>(question)) { Succeeded = true };
+            return new Response<QuestionDtoResponse>(questionResult.Data) { Succeeded = true };
         }
         catch (Exception ex)
         {
             return new Response<QuestionDtoResponse>(null)
-            { State = "NoData", Message = ex.Message, Succeeded = false };
+            {
+                State = "NoData",
+                Message = ex.Message,
+                Succeeded = false
+            };
         }
-
     }
 
     public async Task<Response<GameResultDtoResponse>> SubmitAnswerAsync(AnswerDtoRequest request)
     {
-        // 1. Obtener la sesión actual usando Dapper
         var (sessionData, _) = await _unitOfWork.Queries.QueryAsync<dynamic>(SqlQueries.GetGameSessionById, new { Id = request.SessionId });
         var sessionEntity = sessionData?.FirstOrDefault();
 
@@ -80,8 +84,6 @@ public class GameSessionService : IGameSessionService
             return new Response<GameResultDtoResponse>(null) { Message = "Sesión no encontrada", Succeeded = false };
         }
            
-
-        // 2. Validar respuesta
         var isCorrect = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<bool>(SqlQueries.CheckIfAnswerIsCorrect, new { OptionId = request.OptionId });
 
         await _unitOfWork.BeginTransactionAsync();
@@ -90,8 +92,7 @@ public class GameSessionService : IGameSessionService
         {
             if (!isCorrect.Data)
             {
-                // El jugador pierde
-                sessionEntity.Status = "Lost";
+                sessionEntity.IdStatus = 3;
                 await _unitOfWork.Repository<GameSession>().UpdateAsync(sessionEntity);
                 await _unitOfWork.CommitnAsync();
 
@@ -136,7 +137,7 @@ public class GameSessionService : IGameSessionService
     {
         try
         {
-            var session = new GameSession { PlayerId = playerId, CurrentRound = 1, Status = "In-Progress" };
+            var session = new GameSession { PlayerId = playerId, CurrentRound = 1, IdStatus = 1 };
             await _unitOfWork.BeginTransactionAsync();
             await _unitOfWork.Repository<GameSession>().AddAsync(session);
             await _unitOfWork.CommitnAsync();
@@ -155,7 +156,7 @@ public class GameSessionService : IGameSessionService
         try
         {
             await _unitOfWork.BeginTransactionAsync();
-            await _unitOfWork.Repository<GameSession>().UpdateAsync(new GameSession { Id = sessionId, Status = "Withdrawn" });
+            await _unitOfWork.Repository<GameSession>().UpdateAsync(new GameSession { Id = sessionId, IdStatus = 4 });
             await _unitOfWork.CommitnAsync();
             return new Response<bool>(true) { Succeeded = true };
         }
@@ -165,5 +166,41 @@ public class GameSessionService : IGameSessionService
             return new Response<bool>(false) { Message = ex.Message, Succeeded = false };
         }
       
+    }
+
+    public async Task<Response<bool>> EndGameAsync(EndGameRequest request)
+    {
+        try
+        {
+            var (session, message) = await _unitOfWork.Queries.QueryFirstOrDefaultAsync<GameSession>(
+           SqlQueries.GetGameSessionById,
+           new { Id = request.GameSessionId }
+       );
+
+            if (session == null) return new Response<bool>(false) { Message = message, Succeeded = false };
+
+            if (request.DidRetire)
+            {
+                session.IdStatus = 4;
+                session.AccumulatedPrize = request.FinalScore;
+            }
+            else
+            {
+                session.IdStatus = 3;
+                session.AccumulatedPrize = 0;
+            }
+            await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.Repository<GameSession>().UpdateAsync(session);
+            await _unitOfWork.CommitnAsync();
+
+            return new Response<bool>(true) { Succeeded = true, Message = "Juego finalizado" };
+        }
+        catch (Exception ex)
+        {
+            await _unitOfWork.RollbackAsync();
+            return new Response<bool>(false) { Succeeded = false, Message = ex.Message };
+        }
+      
+       
     }
 }

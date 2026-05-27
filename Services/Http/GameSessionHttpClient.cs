@@ -1,28 +1,59 @@
+using System.Net.Http.Json;
 using CoreLibrary.DTOs.GameSession.Requests;
 using CoreLibrary.DTOs.GameSession.Response;
+using CoreLibrary.Interface.Services.Client;
 using CoreLibrary.Wrappers;
-using Services.Common;
 
 namespace Services.Http;
 
-public class GameSessionHttpClient : BaseHttpClient, IGameSessionHttpClient
+public class GameSessionHttpClient : IGameSessionHttpClient
 {
-    public GameSessionHttpClient(HttpClient httpClient) : base(httpClient)
-    {
-    }
+    private readonly HttpClient _httpClient;
+    public GameSessionHttpClient(HttpClient httpClient) => _httpClient = httpClient;
 
+    // Crea la sesi�n en el Backend
     public async Task<Response<Guid>> StartGameAsync(int playerId)
     {
-        return await SendPostAsync<int, Guid>("GameSession/StartGame", playerId);
+        var res = await _httpClient.PostAsJsonAsync("GameSession/StartGame", playerId);
+        return await res.Content.ReadFromJsonAsync<Response<Guid>>()
+               ?? new Response<Guid>(Guid.Empty) { Message = "Error al crear sesi�n", Succeeded = false };
+    }
+
+    public async Task<Response<bool>> SubmitAnswerAsync(AnswerDtoRequest request)
+    {
+        var res = await _httpClient.PostAsJsonAsync("GameSession/SubmitAnswer", request);
+        return await res.Content.ReadFromJsonAsync<Response<bool>>() ?? new Response<bool>(false);
+    }
+
+    public async Task<Response<GameResultDtoResponse>> SubmitAnswerWithResultAsync(AnswerDtoRequest request)
+    {
+        var res = await _httpClient.PostAsJsonAsync("GameSession/SubmitAnswer", request);
+        return await res.Content.ReadFromJsonAsync<Response<GameResultDtoResponse>>()
+               ?? new Response<GameResultDtoResponse>(null!);
+    }
+
+    public async Task<Response<GameResultDtoResponse>> GetSessionByIdAsync(Guid sessionId)
+    {
+        var res = await _httpClient.GetAsync($"GameSession/GetById/{sessionId}");
+        return await res.Content.ReadFromJsonAsync<Response<GameResultDtoResponse>>()
+               ?? new Response<GameResultDtoResponse>(null!);
+    }
+
+    public async Task<Response<bool>> WithdrawAsync(Guid sessionId)
+    {
+        var res = await _httpClient.PostAsJsonAsync("GameSession/Withdraw", sessionId);
+        return await res.Content.ReadFromJsonAsync<Response<bool>>() ?? new Response<bool>(false);
+    }
+
+    public async Task<Response<bool>> EndGameAsync(EndGameRequest request)
+    {
+        var res = await _httpClient.PostAsJsonAsync("GameSession/EndGame", request);
+        return await res.Content.ReadFromJsonAsync<Response<bool>>() ?? new Response<bool>(false);
     }
 
     public async Task<Response<QuestionDtoResponse>> GetNextQuestionAsync(Guid sessionId)
     {
-        return await SendGetAsync<QuestionDtoResponse>($"GameSession/GetNextQuestion/{sessionId}");
-    }
-
-    public async Task<Response<GameResultDtoResponse>> SubmitAnswerAsync(AnswerDtoRequest request)
-    {
-        return await SendPostAsync<AnswerDtoRequest, GameResultDtoResponse>("GameSession/SubmitAnswer", request);
+        var res = await _httpClient.GetAsync($"GameSession/GetNextQuestion/{sessionId}");
+        return await res.Content.ReadFromJsonAsync<Response<QuestionDtoResponse>>() ?? new Response<QuestionDtoResponse>(null!);
     }
 }

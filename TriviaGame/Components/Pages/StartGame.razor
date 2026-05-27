@@ -8,9 +8,9 @@
 <div class="landing-page">
     <div class="landing-card">
         <div class="hero">
-            <span class="hero-tag">🎮 Trivia Game</span>
+            <div class="hero-badge">QuizGame</div>
             <h1>¿Quién quiere ser millonario?</h1>
-            <p class="hero-subtitle">Responde 5 preguntas de dificultad creciente y acumula premios.</p>
+            <p class="hero-subtitle">Responde 5 preguntas de dificultad creciente y acumula premios reales. Cada respuesta te acerca al gran final.</p>
         </div>
 
         <div class="alias-panel">
@@ -27,7 +27,7 @@
                 @(isLoading ? "Cargando..." : "Iniciar Juego")
             </button>
 
-            <p class="alias-note">Este alias se utilizará para crear o recuperar tu jugador en el servidor.</p>
+            <p class="alias-note">El alias permite guardar tu jugador y volver a jugar desde el mismo nombre.</p>
 
             @if (!string.IsNullOrEmpty(errorMessage))
             {

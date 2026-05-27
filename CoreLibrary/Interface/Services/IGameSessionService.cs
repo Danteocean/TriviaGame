@@ -11,4 +11,6 @@ public interface IGameSessionService
     Task<Response<QuestionDtoResponse>> GetNextQuestionAsync(Guid sessionId);
     Task<Response<GameResultDtoResponse>> SubmitAnswerAsync(AnswerDtoRequest request);
     Task<Response<bool>> WithdrawAsync(Guid sessionId);
+
+    Task<Response<bool>> EndGameAsync(EndGameRequest request);
 }

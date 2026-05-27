@@ -31,7 +31,7 @@ public class SqlQueries
     // Query solicitado anteriormente para obtener la sesión
     public static string GetGameSessionById => @"
         SELECT 
-            Id, PlayerId, CurrentRound, AccumulatedPrize, Status, CreatedAt 
+            Id, PlayerId, CurrentRound, AccumulatedPrize, IdStatus, CreatedAt 
         FROM GameSessions 
         WHERE Id = @Id";
 
@@ -49,9 +49,10 @@ public class SqlQueries
 
     public static string GetAllQuestions => @"
         SELECT 
-            Q.Id AS QuestionId, Q.Text, Q.CategoryId, O.Id AS OptionId, O.Text, O.IsCorrect 
-        FROM Questions Q
-        LEFT JOIN Options O ON Q.Id = O.QuestionId";
+            Q.Id AS QuestionId, Q.Text, Q.CategoryId,C.Points , O.Id AS OptionId, O.Text, O.IsCorrect
+            FROM Questions Q
+            LEFT JOIN Options O ON Q.Id = O.QuestionId
+            LEFT JOIN Categories C ON Q.CategoryId = C.Id";
 
     public static string GetAllCategories => @"
     SELECT Id, Name, DifficultyLevel 

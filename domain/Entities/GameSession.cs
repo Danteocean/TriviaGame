@@ -12,7 +12,7 @@ public class GameSession : IEntity
     public int PlayerId { get; set; }
     public int CurrentRound { get; set; } = 1;
     public decimal AccumulatedPrize { get; set; } = 0;
-    public string Status { get; set; } = "In-Progress"; 
+    public int IdStatus { get; set; } = 1; 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public Player Player { get; set; } = null!;

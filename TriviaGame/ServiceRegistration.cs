@@ -16,5 +16,15 @@ public static class ServiceRegistration
             client.BaseAddress = new Uri(apiBaseUrl);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
         });
+        services.AddHttpClient<IGameSessionHttpClient, GameSessionHttpClient>(client =>
+        {
+            client.BaseAddress = new Uri(apiBaseUrl);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
+        services.AddHttpClient<GameSessionHttpClient>(client =>
+        {
+            client.BaseAddress = new Uri(apiBaseUrl);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
     }
 }

@@ -60,4 +60,13 @@ public class GameSessionController : ControllerBase
     {
         return Ok(await _gameSessionService.WithdrawAsync(sessionId));
     }
+
+    [HttpPost("EndGame")]
+    [ProducesResponseType(typeof(Response<bool>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Response<bool>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(Response<bool>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> EndGame([FromBody] EndGameRequest request)
+    {
+        return Ok(await _gameSessionService.EndGameAsync(request));
+    }
 }

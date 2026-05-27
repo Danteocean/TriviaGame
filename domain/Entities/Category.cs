@@ -12,5 +12,7 @@ public class Category : IEntity
     public string Name { get; set; } = string.Empty;
     public int DifficultyLevel { get; set; }
 
+    public int Points { get; set; }
+
     public ICollection<Question> Questions { get; set; } = new List<Question>();
 }
