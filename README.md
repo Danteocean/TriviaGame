@@ -73,7 +73,7 @@ erDiagram
         int PlayerId FK
         int CurrentRound "default 1"
         decimal AccumulatedPrize
-        int IdStatus FK "1=activa, 3=perdida, 4=ganada/retirado"
+        int IdStatus FK "1=In-Progress, 2=Won ,3=Lost, 4=Withdrawn"
         datetime CreatedAt
     }
 
@@ -111,16 +111,16 @@ erDiagram
 🖼️ **Diagramas en imagen:**
 
 Arquitectura
-![Arquitectura](docs/diagrams/arquitectura.png)
+![Arquitectura](docs/Diagrams/arquitectura.png)
 
 Entidad Relación
-![Entidad-Relación](docs/diagrams/Entidad-Relación.png)
+![Entidad-Relación](docs/Diagrams/Entidad-Relación.png)
 
 Casos de uso
-![Casos de uso](docs/diagrams/Casos-de-Uso.png)
+![Casos de uso](docs/Diagrams/Casos-de-Uso.png)
 
 Máquina de Estados
-![Máquina de Estados](docs/diagrams/Máquina-de-Estados.png)
+![Máquina de Estados](docs/Diagrams/Máquina-de-Estados.png)
 
 ---
 
