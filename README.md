@@ -73,7 +73,7 @@ erDiagram
         int PlayerId FK
         int CurrentRound "default 1"
         decimal AccumulatedPrize
-        int IdStatus "1=activa, 3=perdida, 4=ganada/retirado"
+        int IdStatus FK "1=activa, 3=perdida, 4=ganada/retirado"
         datetime CreatedAt
     }
 
@@ -107,6 +107,20 @@ erDiagram
 📄 **Script de base de datos:** [`script/Backup.sql`](script/Backup.sql) — crea la base de datos `TriviaGameDb` con todas las tablas, índices y datos iniciales.
 
 🔧 **Diagrama editable:** [`docs/arquitectura.drawio`](docs/arquitectura.drawio) — 3 pestañas (Arquitectura, ERD, Casos de Uso).
+
+🖼️ **Diagramas en imagen:**
+
+Arquitectura
+![Arquitectura](docs/diagrams/arquitectura.png)
+
+Entidad Relación
+![Entidad-Relación](docs/diagrams/Entidad-Relación.png)
+
+Casos de uso
+![Casos de uso](docs/diagrams/Casos-de-Uso.png)
+
+Máquina de Estados
+![Máquina de Estados](docs/diagrams/Máquina-de-Estados.png)
 
 ---
 
