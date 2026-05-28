@@ -2,10 +2,6 @@
 
 public class Response<T>
 {
-    public Response(int v)
-    {
-    }
-
     public Response() { }
 
     public Response(T data)

@@ -41,7 +41,6 @@
         <div class="game-header">
             <div class="round-info">
                 <span class="round-badge">Ronda @currentRound de 5</span>
-                <span class="category-label">@CategoryName</span>
             </div>
             <div class="accumulated">
                 <div class="accumulated-label">Acumulado</div>
@@ -145,13 +144,10 @@
     private FeedbackState? feedbackState;
 
     private static readonly decimal[] PrizeAmounts = { 100, 500, 1000, 5000, 10000 };
-    private static readonly string[] CategoryNames = {
-        "Conocimiento General", "Ciencias", "Historia", "Tecnología", "Cultura Avanzada"
-    };
+ 
     private static readonly string[] Letters = { "A", "B", "C", "D" };
 
-    private string CategoryName => currentRound >= 1 && currentRound <= CategoryNames.Length
-        ? CategoryNames[currentRound - 1] : "";
+   
 
     protected override async Task OnInitializedAsync()
     {

@@ -26,5 +26,10 @@ public static class ServiceRegistration
             client.BaseAddress = new Uri(apiBaseUrl);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
         });
+        services.AddHttpClient<IAdminHttpClient, AdminHttpClient>(client =>
+        {
+            client.BaseAddress = new Uri(apiBaseUrl);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
     }
 }

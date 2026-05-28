@@ -1,0 +1,48 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: triviagame-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "TriviaGame@123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./script:/scripts
+      - ./sqlserver/init-db.sh:/init-db.sh
+    entrypoint: ["/bin/bash", "/init-db.sh"]
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "TriviaGame@123" -C -Q "SELECT 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  triviagame-api:
+    build:
+      context: .
+      dockerfile: TriviaGameApi/Dockerfile
+    container_name: triviagame-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=TriviaGameDb;User Id=sa;Password=TriviaGame@123;TrustServerCertificate=True;MultipleActiveResultSets=true"
+    ports:
+      - "5000:8080"
+
+  triviagame-web:
+    build:
+      context: .
+      dockerfile: TriviaGame/Dockerfile
+    container_name: triviagame-web
+    depends_on:
+      - triviagame-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ApiSettings__BaseUrl: "http://triviagame-api:8080/"
+    ports:
+      - "5001:8080"

@@ -13,6 +13,7 @@ public static class ServiceRegistration
         services.AddTransient<IQuestionService, QuestionService>();
         services.AddTransient<ICategoryService, CategoryService>();
         services.AddTransient<IScoreboardService, ScoreboardService>();
+        services.AddTransient<IAdminService, AdminService>();
         services.AddAutoMapper((cfg) => { }, AppDomain.CurrentDomain.GetAssemblies());
     }
 }

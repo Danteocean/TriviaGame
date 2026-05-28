@@ -1,0 +1,105 @@
+using AutoMapper;
+using CoreLibrary.DTOs.Category.Response;
+using CoreLibrary.DTOs.Question.Requests;
+using CoreLibrary.DTOs.Question.Response;
+using CoreLibrary.Interface.Repositories;
+using CoreLibrary.Interface.Services;
+using CoreLibrary.Wrappers;
+using Domain.Entities;
+using Domain.Querys;
+
+namespace CoreLibrary.Features;
+
+public class AdminService : IAdminService
+{
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+
+    public AdminService(IUnitOfWork unitOfWork, IMapper mapper)
+    {
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
+
+    public async Task<Response<List<CategoryDtoResponse>>> GetAllCategoriesAsync()
+    {
+        try
+        {
+            var (data, message) = await _unitOfWork.Queries.QueryAsync<dynamic>(
+                SqlQueries.GetAllCategories, null);
+
+            if (data != null && data.Any())
+            {
+                var result = _mapper.Map<List<CategoryDtoResponse>>(data);
+                return new Response<List<CategoryDtoResponse>>(result)
+                { State = "Ok", Message = message, Succeeded = true };
+            }
+
+            return new Response<List<CategoryDtoResponse>>(null)
+            { State = "NoData", Message = message, Succeeded = true };
+        }
+        catch (Exception ex)
+        {
+            return new Response<List<CategoryDtoResponse>>(null)
+            { State = "Error", Message = ex.Message, Succeeded = false };
+        }
+    }
+
+    public async Task<Response<int>> CreateQuestionAsync(QuestionDtoRequest request)
+    {
+        try
+        {
+            var question = _mapper.Map<Question>(request);
+            await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.Repository<Question>().AddAsync(question);
+            await _unitOfWork.CommitnAsync();
+            return new Response<int>(question.Id)
+            { State = "Ok", Message = "Pregunta creada correctamente", Succeeded = true };
+        }
+        catch (Exception ex)
+        {
+            await _unitOfWork.RollbackAsync();
+            return new Response<int>()
+            { State = "Error", Message = ex.Message, Succeeded = false };
+        }
+    }
+
+    public async Task<Response<List<QuestionDtoResponse>>> GetAllQuestionsAsync()
+    {
+        try
+        {
+            var questionDictionary = new Dictionary<int, QuestionDtoResponse>();
+
+            var (data, message) = await _unitOfWork.Queries.QueryMultiMapAsync<QuestionDtoResponse, OptionDtoResponse, QuestionDtoResponse>(
+                SqlQueries.GetAllQuestions,
+                (question, option) =>
+                {
+                    if (!questionDictionary.TryGetValue(question.QuestionId, out var currentQuestion))
+                    {
+                        currentQuestion = question;
+                        currentQuestion.Options = new List<OptionDtoResponse>();
+                        questionDictionary.Add(currentQuestion.QuestionId, currentQuestion);
+                    }
+
+                    if (option != null) currentQuestion.Options.Add(option);
+                    return currentQuestion;
+                },
+                splitOn: "OptionId"
+            );
+
+            if (data != null)
+            {
+                return new Response<List<QuestionDtoResponse>>(questionDictionary.Values.ToList())
+                { State = "Ok", Message = "Success", Succeeded = true };
+            }
+
+            return new Response<List<QuestionDtoResponse>>(null!)
+            { State = "NoData", Message = message, Succeeded = false };
+        }
+        catch (Exception ex)
+        {
+            return new Response<List<QuestionDtoResponse>>(null!)
+            { State = "Error", Message = ex.Message, Succeeded = false };
+        }
+    }
+}

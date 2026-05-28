@@ -33,7 +33,7 @@ public class PlayerService : IPlayerService
         catch (Exception ex)
         {
             await _unitOfWork.RollbackAsync();
-            return new Response<int>(0) { State = "Error", Message = ex.Message, Succeeded = false };
+            return new Response<int>() { State = "Error", Message = ex.Message, Succeeded = false };
         }
     }
 

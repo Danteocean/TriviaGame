@@ -1,0 +1,88 @@
+@page "/admin"
+@using CoreLibrary.Interface.Services.Client
+@using CoreLibrary.DTOs.Question.Response
+@inject IAdminHttpClient AdminService
+@inject NavigationManager Navigation
+
+<div class="admin-page">
+    <div class="admin-card">
+        <div class="admin-header">
+            <h2>Administrar Preguntas</h2>
+            <button class="btn-primary btn-sm" @onclick="GoToCreate">
+                + Nueva Pregunta
+            </button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="error-message">@errorMessage</div>
+        }
+
+        @if (isLoading)
+        {
+            <p class="loading-text">Cargando preguntas...</p>
+        }
+        else if (questions != null && questions.Any())
+        {
+            <div class="questions-table-wrap">
+                <table class="questions-table">
+                    <thead>
+                        <tr>
+                            <th>Pregunta</th>
+                            <th>Nivel</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var q in questions)
+                        {
+                            <tr>
+                                <td>@q.Text</td>
+                                <td>@q.CategoryId</td>
+                                <td>@(q.Options?.Count ?? 0)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else if (!isLoading)
+        {
+            <p class="empty-text">No hay preguntas registradas. Crea la primera.</p>
+        }
+    </div>
+</div>
+
+@code {
+    private List<QuestionDtoResponse> questions = new();
+    private bool isLoading = true;
+    private string errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadQuestions();
+    }
+
+    private void GoToCreate()
+    {
+        Navigation.NavigateTo("/admin/create");
+    }
+
+    private async Task LoadQuestions()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+
+        var response = await AdminService.GetAllQuestionsAsync();
+        if (response.Succeeded && response.Data != null)
+        {
+            questions = response.Data;
+        }
+        else
+        {
+            errorMessage = response.Message ?? "Error al cargar preguntas.";
+        }
+
+        isLoading = false;
+    }
+}

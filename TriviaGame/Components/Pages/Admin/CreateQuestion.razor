@@ -1,0 +1,175 @@
+@page "/admin/create"
+@using CoreLibrary.Interface.Services.Client
+@using CoreLibrary.DTOs.Question.Requests
+@using CoreLibrary.DTOs.Category.Response
+@inject IAdminHttpClient AdminService
+@inject NavigationManager Navigation
+
+<div class="admin-page">
+    <div class="admin-card">
+
+        <div class="admin-header">
+            <a href="/admin" class="btn-back">&larr; Volver</a>
+            <h2>Crear Pregunta</h2>
+        </div>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="error-message">@errorMessage</div>
+        }
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="success-message">@successMessage</div>
+        }
+
+        <div class="form-group">
+            <label for="questionText">Pregunta</label>
+            <input id="questionText" class="form-input" @bind="questionText" placeholder="Escribe la pregunta" />
+        </div>
+
+        <div class="form-group">
+            <label for="categorySelect">Categoría</label>
+            <select id="categorySelect" class="form-input" @bind="selectedCategoryId">
+                <option value="0">-- Selecciona una categoría --</option>
+                @foreach (var cat in categories)
+                {
+                    <option value="@cat.Id">@cat.Name (Nivel @cat.DifficultyLevel)</option>
+                }
+            </select>
+        </div>
+
+        <h3 class="options-title">Opciones</h3>
+        <p class="options-note">Selecciona la opción correcta marcando el radio button.</p>
+
+        <div class="options-list">
+            @for (int i = 0; i < options.Count; i++)
+            {
+                var idx = i;
+                <div class="option-row @(options[idx].IsCorrect ? "option-correct" : "")">
+                    <div class="option-radio">
+                        <input type="radio" name="correctOption" value="@idx"
+                        checked="@(options[idx].IsCorrect)"
+                        @onchange="(e) => SetCorrectOption(idx)" />
+                    </div>
+                    <div class="option-input-wrap">
+                        <input class="form-input" @bind="options[idx].Text"
+                        placeholder="Opción @(idx + 1)" />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="btn-primary" @onclick="HandleCreateQuestion" disabled="@isLoading">
+            @(isLoading ? "Guardando..." : "Guardar Pregunta")
+        </button>
+    </div>
+</div>
+
+@code {
+    private string questionText = string.Empty;
+    private int selectedCategoryId;
+    private List<CategoryDtoResponse> categories = new();
+    private List<OptionDtoRequest> options = new();
+    private bool isLoading;
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            options = new List<OptionDtoRequest>
+            {
+                new() { Text = "", IsCorrect = false },
+                new() { Text = "", IsCorrect = false },
+                new() { Text = "", IsCorrect = false },
+                new() { Text = "", IsCorrect = false },
+            };
+
+            var response = await AdminService.GetAllCategoriesAsync();
+            if (response.Succeeded && response.Data != null)
+            {
+                categories = response.Data;
+            }
+            else
+            {
+                errorMessage = response.Message ?? "Error al cargar categorías.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error al inicializar: " + ex.Message;
+        }
+    }
+
+    private void SetCorrectOption(int index)
+    {
+        for (int i = 0; i < options.Count; i++)
+        {
+            options[i].IsCorrect = i == index;
+        }
+    }
+
+    private async Task HandleCreateQuestion()
+    {
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(questionText))
+        {
+            errorMessage = "Debes escribir la pregunta.";
+            return;
+        }
+        if (selectedCategoryId == 0)
+        {
+            errorMessage = "Debes seleccionar una categoría.";
+            return;
+        }
+        if (options.Any(o => string.IsNullOrWhiteSpace(o.Text)))
+        {
+            errorMessage = "Todas las opciones deben tener texto.";
+            return;
+        }
+        if (!options.Any(o => o.IsCorrect))
+        {
+            errorMessage = "Debes seleccionar una opción correcta.";
+            return;
+        }
+
+        isLoading = true;
+
+        var request = new QuestionDtoRequest
+        {
+            Text = questionText,
+            CategoryId = selectedCategoryId,
+            Options = options
+        };
+
+        try
+        {
+            var response = await AdminService.CreateQuestionAsync(request);
+            if (response.Succeeded)
+            {
+                successMessage = "Pregunta creada correctamente.";
+                questionText = string.Empty;
+                selectedCategoryId = 0;
+                options = options.Select(o => new OptionDtoRequest { Text = "", IsCorrect = false }).ToList();
+
+                await Task.Delay(1500);
+                Navigation.NavigateTo("/admin");
+            }
+            else
+            {
+                errorMessage = response.Message ?? "Error al crear la pregunta.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error de conexión: " + ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

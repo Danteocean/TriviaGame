@@ -164,7 +164,7 @@ public class GameSessionService : IGameSessionService
         catch (Exception ex)
         {
             await _unitOfWork.RollbackAsync();
-            return new Response<Guid>(playerId) { Message = ex.Message, Succeeded = false };
+            return new Response<Guid>() { Message = ex.Message, Succeeded = false };
         }
 
     }
