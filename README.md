@@ -12,7 +12,7 @@ graph TB
         BL["TriviaGame (Blazor Server)"]
     end
     subgraph API
-        API["TriviaGameApi (ASP.NET Core)"]
+        API_SERVER["TriviaGameApi (ASP.NET Core)"]
     end
     subgraph Capa de Servicios
         CL["CoreLibrary<br/>(Interfaces, DTOs, Servicios, AutoMapper)"]
@@ -28,12 +28,12 @@ graph TB
         DB[("SQL Server<br/>TriviaGameDb")]
     end
 
-    BL -->|HTTP / SignalR| API
+    BL -->|HTTP / SignalR| API_SERVER
     BL -->|HttpClient| SRV
-    SRV -->|HTTP JSON| API
-    API --> CL
+    SRV -->|HTTP JSON| API_SERVER
+    API_SERVER --> CL
     CL --> DOM
-    API --> INF
+    API_SERVER --> INF
     INF --> DB
     DOM -->|Dapper SqlConnection| DB
 ```
